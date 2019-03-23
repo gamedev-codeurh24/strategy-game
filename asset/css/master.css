@@ -1,0 +1,77 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.info,
+.render,
+.tools {
+    border: 1px solid black;
+    min-height: 100px;
+    z-index: 100;
+    background-color: #4448;
+    color: white;
+}
+
+.render {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.map-item {
+    width: 64px;
+    height: 64px;
+}
+
+.map,
+.units{
+    position: absolute;
+    z-index: 10;
+    width: 1280px;
+    line-height: 0;
+}
+.map, .units{
+    /* display: none; */
+    top:0px;
+}
+
+.map1 {
+    background-image: url(/asset/img/1.png);
+    display: inline-block;
+}
+.map2 {
+    background-image: url(/asset/img/2.png);
+    display: inline-block;
+}
+
+.unit {
+    position: absolute;
+    background-image: url(/asset/img/unit1.png);
+    width: 32px;
+    height: 32px;
+    z-index: 11;
+}
+
+.unit1 {
+    position: absolute;
+    background-image: url(/asset/img/unit1.png);
+    width: 32px;
+    height: 32px;
+    z-index: 11;
+}
+
+.unit2 {
+    position: absolute;
+    background-image: url(/asset/img/unit2.png);
+    width: 32px;
+    height: 32px;
+    z-index: 11;
+}
