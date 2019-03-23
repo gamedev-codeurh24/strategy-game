@@ -11,9 +11,7 @@ function _360(x, y){
 }
 
 $(function(){
-  if (window.Worker) {
-    log('Worker to work');
-  }
+  
 
     $(document).mousemove(function(event){
         window.mouseX =  event.pageX;

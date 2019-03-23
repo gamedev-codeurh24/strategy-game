@@ -1,3 +1,14 @@
+window.mapCollision = [
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
+    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
+    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
+    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
+    [-1, 0, 0,-1,-1,-1,-1,-1,-1,-1, 0, 0,-1],
+    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
+    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+];
 
 $(function(){
 
@@ -8,6 +19,9 @@ $(function(){
     // nom de l'id de l'unité
     self.id = document.querySelector(selecteurCSS).id;
 
+    self.path = [];
+
+    // empeche le deplacement de l'unité pour rien en boucle
     self.move = false;
 
     // position de départ pour aller a un endroi
@@ -29,14 +43,31 @@ $(function(){
       if(self.isSelected()){
         self.endPath.x =  event.pageX;
         self.endPath.y =  event.pageY;
+
+        var easystar = new EasyStar.js();
+        easystar.setGrid(window.mapCollision);
+        easystar.setAcceptableTiles([0]);
+        var x1 = pixel2IdArr(unitPosX(selecteurCSS));
+        var y1 = pixel2IdArr(unitPosY(selecteurCSS));
+        var x2 = pixel2IdArr(self.endPath.x);
+        var y2 = pixel2IdArr(self.endPath.y);
+        easystar.findPath(x1, y1, x2, y2, function(path){
+          log(path);
+          self.path = path;
+        });
+        easystar.calculate();
+
+
         self.move = true;
+
+
       }
     });
 
 
     // function du est exécuté a l'appel de la function parente
     self.contructor = function(){
-      self.interval = setInterval(function() { self.loop(); },1);
+      self.interval = setInterval(function() { self.loop(); },10);
     };
     self.contructor();
 
@@ -45,6 +76,27 @@ $(function(){
 
 
       if(self.move){
+
+
+
+
+        if(self.path == []){
+          log('Aucun chemin');
+          return false;
+        }
+
+        if(self.path[1].x === undefined || self.path[1].y === undefined){
+          self.move = false;
+          return false;
+        }
+
+        self.endPath.x = ((self.path[1].x)*64)+32
+        self.endPath.y = ((self.path[1].y)*64)+32
+        log('['+self.path[0].x+']x:'+self.endPath.x+'  y:'+self.endPath.y );
+
+
+
+
         // distance en px entre l'unité et le pointeur de la souris
         var dstUnit1X = self.endPath.x - unitPosX(selecteurCSS);
         var dstUnit1Y = self.endPath.y - unitPosY(selecteurCSS);
@@ -71,7 +123,24 @@ $(function(){
             $( selecteurCSS ).css( 'left', '-='+(Math.abs(self.vx))+'px' );
           }
         }else{
-          self.move = false;
+          if(self.path.length > 1){
+            log('path max '+self.path.length);
+            self.path.splice(0, 1);
+            log(self.path);
+            try {
+              self.endPath.x = ((self.path[1].x)*64)+32
+              self.endPath.y = ((self.path[1].y)*64)+32
+            }
+            catch(error) {
+              //console.error(error);
+              log('stop move ');
+              self.move = false;
+            }
+          }else{
+            log('stop move ');
+            self.move = false;
+          }
+
         }
 
         if (Math.abs(distance) > 10) {
@@ -81,7 +150,25 @@ $(function(){
             $( selecteurCSS ).css( 'top', '-='+(Math.abs(self.vy))+'px' );
           }
         }else{
-          self.move = false;
+          if(self.path.length > 1){
+            log('path max '+self.path.length);
+            self.path.splice(0, 1);
+            log(self.path);
+
+
+            try {
+              self.endPath.x = ((self.path[1].x)*64)+32
+              self.endPath.y = ((self.path[1].y)*64)+32
+            }
+            catch(error) {
+              //console.error(error);
+              log('stop move ');
+              self.move = false;
+            }
+          }else{
+            log('stop move ');
+            self.move = false;
+          }
         }
 
       }
@@ -157,30 +244,20 @@ $(function(){
     ##################################
     */
 
-    window.mapCollision = [
-        [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-        [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-        [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-        [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-        [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-        [-1, 0, 0,-1,-1,-1,-1,-1,-1,-1, 0, 0,-1],
-        [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-        [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-        [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-    ];
 
-    var easystar = new EasyStar.js();
-    easystar.setGrid(window.mapCollision);
-    easystar.setAcceptableTiles([0]);
-    var x1 = pixel2IdArr(window.unit1X);
-    var y1 = pixel2IdArr(window.unit1Y);
-    var x2 = pixel2IdArr(window.targetPathX);
-    var y2 = pixel2IdArr(window.targetPathY);
-    easystar.findPath(x1, y1, x2, y2, function(path){
-      // $('.info').text(vx+' ______ '+vy );
-      console.log(path);
-    });
-    easystar.calculate();
+
+    // var easystar = new EasyStar.js();
+    // easystar.setGrid(window.mapCollision);
+    // easystar.setAcceptableTiles([0]);
+    // var x1 = pixel2IdArr(window.unit1X);
+    // var y1 = pixel2IdArr(window.unit1Y);
+    // var x2 = pixel2IdArr(window.targetPathX);
+    // var y2 = pixel2IdArr(window.targetPathY);
+    // easystar.findPath(x1, y1, x2, y2, function(path){
+    //   // $('.info').text(vx+' ______ '+vy );
+    //   console.log(path);
+    // });
+    // easystar.calculate();
 
   })
 
