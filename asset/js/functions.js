@@ -35,6 +35,14 @@ function distanceClic(selecteurCSS){
     return  calcHypotenuse(dstUnitX, dstUnitY) ;
 }
 
+function mapPosX(){
+  return parseInt($('.map').css('left'))
+}
+
+function mapPosY(){
+  return parseInt($('.map').css('top'))
+}
+
 // renvoi la position reel de l'image. (son centre par rapport au left)
 function unitPosX(selecteurCSS){
     return parseInt(   $(selecteurCSS).css('left')  ) +(parseInt($(selecteurCSS).css('width'))/2);

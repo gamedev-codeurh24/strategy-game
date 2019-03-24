@@ -33,7 +33,8 @@
         <script src="asset/js/globals.js"></script>
         <script src="asset/js/functions.js"></script>
         <script src="asset/js/map.js"></script>
-        <script src="asset/js/easystar-0.4.3.min.js"></script>
+        <!-- https://github.com/qiao/PathFinding.js/ -->
+        <script src="asset/js/pathfinding-browser.min.js"></script>
         <script src="asset/js/unit.js"></script>
         <script src="asset/js/mouseMoveMap.js"></script>
         <script src="asset/js/trajectory.js"></script>

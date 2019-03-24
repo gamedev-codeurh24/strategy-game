@@ -1,13 +1,13 @@
 window.mapCollision = [
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-    [-1, 0, 0,-1,-1,-1,-1,-1,-1,-1, 0, 0,-1],
-    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-    [-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1],
-    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,1,1,1,1,1,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
 $(function(){
@@ -41,22 +41,22 @@ $(function(){
     // cette meme unité change a la position de la souris au moment du clic
     document.querySelector('.map').addEventListener("click", function(){
       if(self.isSelected()){
-        self.endPath.x =  event.pageX;
-        self.endPath.y =  event.pageY;
-
-        var easystar = new EasyStar.js();
-        easystar.setGrid(window.mapCollision);
-        easystar.setAcceptableTiles([0]);
+        self.endPath.x =  event.pageX-mapPosX();
+        self.endPath.y =  event.pageY-mapPosY();
+        
         var x1 = pixel2IdArr(unitPosX(selecteurCSS));
         var y1 = pixel2IdArr(unitPosY(selecteurCSS));
         var x2 = pixel2IdArr(self.endPath.x);
         var y2 = pixel2IdArr(self.endPath.y);
-        easystar.findPath(x1, y1, x2, y2, function(path){
-          log(path);
-          self.path = path;
-        });
-        easystar.calculate();
 
+        var grid = new PF.Grid(window.mapCollision);
+        var finder = new PF.JumpPointFinder();
+        // var finder = new PF.AStarFinder();
+        var path = finder.findPath(x1, y1, x2, y2, grid);
+        path.forEach(function(element) {
+          self.path.push({x:element[0], y:element[1]})
+        });
+        log(self.path);
 
         self.move = true;
 
@@ -85,14 +85,22 @@ $(function(){
           return false;
         }
 
-        if(self.path[1].x === undefined || self.path[1].y === undefined){
-          self.move = false;
+        try {
+          if(typeof self.path[1].x == 'undefined' || typeof self.path[1].y == 'undefined'){
+            self.move = false;
+            return false;
+          }
+        }
+        catch(error) {
+          //console.error(error);
+          //log('stop move ');
           return false;
         }
 
+
         self.endPath.x = ((self.path[1].x)*64)+32
         self.endPath.y = ((self.path[1].y)*64)+32
-        log('['+self.path[0].x+']x:'+self.endPath.x+'  y:'+self.endPath.y );
+        log('['+self.path[0].x+']['+self.path[0].y+']x:'+self.endPath.x+'  y:'+self.endPath.y );
 
 
 
@@ -124,20 +132,20 @@ $(function(){
           }
         }else{
           if(self.path.length > 1){
-            log('path max '+self.path.length);
+            //log('path max '+self.path.length);
             self.path.splice(0, 1);
-            log(self.path);
+            //log(self.path);
             try {
               self.endPath.x = ((self.path[1].x)*64)+32
               self.endPath.y = ((self.path[1].y)*64)+32
             }
             catch(error) {
               //console.error(error);
-              log('stop move ');
+              //log('stop move ');
               self.move = false;
             }
           }else{
-            log('stop move ');
+            //log('stop move ');
             self.move = false;
           }
 
@@ -151,9 +159,9 @@ $(function(){
           }
         }else{
           if(self.path.length > 1){
-            log('path max '+self.path.length);
+            //log('path max '+self.path.length);
             self.path.splice(0, 1);
-            log(self.path);
+            //log(self.path);
 
 
             try {
@@ -162,11 +170,11 @@ $(function(){
             }
             catch(error) {
               //console.error(error);
-              log('stop move ');
+              //log('stop move ');
               self.move = false;
             }
           }else{
-            log('stop move ');
+            //log('stop move ');
             self.move = false;
           }
         }
