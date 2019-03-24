@@ -39,11 +39,14 @@ $(function(){
     // si l'unité est selectionné est que tu clic a un endroi sur la map
     // alors la la fini du chemin de l'unité qui etait a l'endroit meme de
     // cette meme unité change a la position de la souris au moment du clic
-    document.querySelector('.map').addEventListener("click", function(){
+    // document.querySelector('.map').addEventListener("click", function(){
+    $('body').on('click', '.map', function(){
+
+      
       if(self.isSelected()){
         self.endPath.x =  event.pageX-mapPosX();
         self.endPath.y =  event.pageY-mapPosY();
-        
+
         var x1 = pixel2IdArr(unitPosX(selecteurCSS));
         var y1 = pixel2IdArr(unitPosY(selecteurCSS));
         var x2 = pixel2IdArr(self.endPath.x);

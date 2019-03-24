@@ -1,5 +1,19 @@
 function unit(id,x,y){
+  var self = this;
+  self.id = '#unit'+id;
+  self.camp = '';
+
   $( '.units' ).append( '<div class="unit" id="unit'+(id)+'" style="left:'+x+'px;top:'+y+'px;"></div>' );
+  $( self.id  ).append('<div class="unit-view"><div>')
+
+  self.camp = function(id){
+    self.camp = 'camp'+id ;
+    $( self.id ).append('<img src="asset/img/unit'+id+'.png" />')
+    $( self.id ).addClass( self.camp );
+  }
+
+  return self;
+
 }
 
 function calcHypotenuse(a, b) {

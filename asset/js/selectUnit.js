@@ -18,7 +18,11 @@ $(function(){
 
   // liste toutes les unités selectionnés à la souris
   window.unitSelected = [];
-  $('.unit').click(function(event){
+  $('.unit img').click(function(event){
+
+
+    this.id = $(this).parent().attr('id');
+
     // si on maintient la touche control alors on peut
     // selectionner plusieurs unités
     if(window.keyPressed.indexOf('Control') != -1){

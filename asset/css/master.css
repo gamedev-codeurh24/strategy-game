@@ -54,24 +54,30 @@ html,body{
 
 .unit {
     position: absolute;
-    background-image: url(/asset/img/unit1.png);
+    /* background-image: url(/asset/img/unit1.png); */
     width: 32px;
     height: 32px;
-    z-index: 11;
 }
 
-.unit1 {
-    position: absolute;
-    background-image: url(/asset/img/unit1.png);
-    width: 32px;
-    height: 32px;
-    z-index: 11;
+
+
+.unit img{
+  position: absolute;
+  z-index: 20;
+  margin-left: 1px;
+  width: 29px;
+  height: 30px;
 }
 
-.unit2 {
-    position: absolute;
-    background-image: url(/asset/img/unit2.png);
-    width: 32px;
-    height: 32px;
-    z-index: 11;
+
+.unit-view{
+  border: 2px solid #bdff542e;
+  position:  absolute;
+  z-index: -1;
+  border-radius: 100%;
+  width: 256px;
+  height: 256px;
+  top: -112px;
+  left:-112px;
+  pointer-events:none;
 }
