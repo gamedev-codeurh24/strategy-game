@@ -16,6 +16,8 @@ $(function(){
   function Unit(selecteurCSS){
     var self = this;
 
+    self.health = 100;
+
     // nom de l'id de l'unité
     self.id = document.querySelector(selecteurCSS).id;
 
@@ -34,7 +36,133 @@ $(function(){
     self.endPath = {
       x: unitPosX(selecteurCSS),
       y: unitPosY(selecteurCSS)
+    };
+
+    self.fire = function(id,id2, dstX, dstY){
+      $(id).css('border', '1px solid red');
+      var idName = $(id).attr('id')
+      var SFX = document.getElementById('soundFX-'+idName);
+      if(id == '#unit1'){
+        log('fire unit1');
+      }
+      if($(id+' .fireContainer div').css('display') == 'none' && SFX.currentTime > 0.5 && SFX.currentTime < 3.5){
+        $(id+' .fireContainer div').css('display', 'block');
+      }else{
+        $(id+' .fireContainer div').css('display', 'none');
+      }
+      $(id2).css('border', '1px solid red');
+      $(id).css('transform', 'rotate('+_360(dstX, dstY)+'deg)');
+      $(id+' .health-bar').css('transform', 'rotate(-'+_360(dstX, dstY)+'deg)');
     }
+
+    // ajoute des drapeaux ennemis
+    self.enemy = {
+      flag: [],
+      add: function(flag){
+        this.flag.push(flag);
+      }
+    }
+
+    // compteur qui ralenti l'annimation des tires
+    self.compteur = 0;
+
+    // fonction qui gere les ennemis dans un perimetre de l'unité
+    self.hasSeen = function() {
+
+      /*
+         A re-vérifier les commentaire ci dessous.
+         si apres un ennemi tué, il reste le bogue
+         du tire en boucle avec l'audio
+      */
+      // pour ne pas rester bloquer de tirer quand on n'as fini
+      // de tuer l'ennemi
+      // if(self.enemy.flag.length == 0){
+      //   console.log(self.id)
+      //   $('#'+self.id+' .fireContainer div').css('display', 'none');
+      //   if($('#soundFX-'+self.id).length != 0){
+      //     var SFX = document.getElementById('soundFX-'+self.id);
+      //     SFX.pause();
+      //     SFX.currentTime = 0;
+      //   }
+      // }
+
+      // pour chaque drapeau ennemi
+      self.enemy.flag.forEach(function(element) {
+        // récupere le resultat pour optimiser le temps de traitement
+        // c'est l'objet jquery contenant tout les ennemi du drapeau element
+        var objJQuery = $('.'+element);
+        // détermine en une seul fois la longueur du tableau ( de l'objet )
+        // pour éviter de refaire le calcule a chaque tour de boucle
+        var n = objJQuery.length;
+
+
+        // la boucle
+        // pour chaque balise ennemi
+        for (var i = 0; i < n; i++) {
+          // on verifie la distance entre l'unité chaque ennemi
+          var dstX = objJQuery[i].offsetLeft - unitPosX('#'+self.id)+14;
+          var dstY = objJQuery[i].offsetTop  - unitPosY('#'+self.id)+14;
+          var distance =  calcHypotenuse(dstX, dstY);
+          distance = parseInt(distance);
+
+          self.compteur++;
+
+          // dans ce tour de bouble si l'ennemi actuellement traiter
+          // a une distance de moins de 128 pixel alors on agit
+          if(distance < 128){
+
+            // ralenti l'annimation du tire qui est lier a la diminition
+            // de la vie de l'ennemie et sa destruction
+            if((self.compteur % 10) == 0){
+              // si l'unité n'a pas d'audio alors on lui en ajoute un
+              // qui démarre automatiquement
+              if($('#soundFX-'+self.id).length == 0){
+                $( '#'+self.id).append( '<audio id="soundFX-'+self.id+'" src="asset/sound/effect/uzi-submachine-gun.ogg" loop autoplay></audio>' );
+              }else{
+                // sinon c'est qu'on a deja un audio html dans l'unité
+
+                //l'unité se tourne vers l'ennemi
+                $('#'+self.id).css('transform', 'rotate('+_360(dstX, dstY)+'deg)');
+                // ça barre de vie elle évite de tourné. ce qui a pour effet
+                // au moins de la laisser tout le temp horizontale
+                $('#'+self.id+' .health-bar').css('transform', 'rotate(-'+_360(dstX, dstY)+'deg)');
+
+                // recuperation de la balise audio appartenant a l'unité
+                var SFX = document.getElementById('soundFX-'+self.id);
+
+                // si le tire est caché et que l'audio du tire est synchronisé
+                // alors ont affiche le tire et tout le reste
+                if($('#'+self.id+' .fireContainer div').css('display') == 'none' && SFX.currentTime > 0.5 && SFX.currentTime < 3.5){
+                  $('#'+self.id+' .fireContainer div').css('display', 'block');
+                  var idEnemy = parseInt(objJQuery[i].id.replace('unit', ''))-1;
+                  // perte de la vie de l'enneni
+                  window.units[idEnemy].health += -10;
+                  // si l'ennemi a sa vie en en dessous de 2
+                  // alors on le tue
+                  if(  window.units[idEnemy].health < 2){
+                    // suppression de l'ennemi
+                    $('#'+objJQuery[i].id).remove();
+                    // pour évité les bug de tire continue suppression de tout les audio
+                    $('audio').remove();
+
+                    // pour éviter le bug di tire continue ont cache tout les tires
+                    $('.fireContainer div').css('display', 'none');
+                  }
+                }else{
+                  // pour faire un effet de clignotement quand l'unité tire
+                  // le tire doit etre caché aussitot qu'il est affiché
+                  $('#'+self.id+' .fireContainer div').css('display', 'none');
+                }
+
+              } // fin du else quand la balise audio est presente dans l'unité
+            } // fin du compteur qui ralenti l'annimation des tire
+          } // fin de la distance de vue pour agir
+        } // fin de la boucle des ennemi par drapeau
+      }); // fin du foreach
+
+    }
+
+
 
     // si l'unité est selectionné est que tu clic a un endroi sur la map
     // alors la la fini du chemin de l'unité qui etait a l'endroit meme de
@@ -42,7 +170,7 @@ $(function(){
     // document.querySelector('.map').addEventListener("click", function(){
     $('body').on('click', '.map', function(){
 
-      
+
       if(self.isSelected()){
         self.endPath.x =  event.pageX-mapPosX();
         self.endPath.y =  event.pageY-mapPosY();
@@ -59,7 +187,7 @@ $(function(){
         path.forEach(function(element) {
           self.path.push({x:element[0], y:element[1]})
         });
-        log(self.path);
+        // log(self.path);
 
         self.move = true;
 
@@ -76,6 +204,31 @@ $(function(){
 
     // BOUCLE de l'unité pour l'annimé
     self.loop = function(){
+
+      self.hasSeen();
+
+      var sizeW = $('#'+self.id).width();
+      if(self.health >= 80 ){
+        $('#'+self.id+' .health-bar').css('background', '#0F07');
+        $('#'+self.id+' .health-bar').css('width', parseInt((sizeW*1))+'px');
+
+      }else if(self.health >= 60 && self.health < 80){
+        $('#'+self.id+' .health-bar').css('background', '#b4ff00b5');
+        $('#'+self.id+' .health-bar').css('width', parseInt((sizeW*0.8))+'px');
+
+      }else if(self.health >= 40  && self.health < 60){
+        $('#'+self.id+' .health-bar').css('background', '#ffe000b5');
+        $('#'+self.id+' .health-bar').css('width', parseInt((sizeW*0.6))+'px');
+
+      }else if(self.health >= 20  && self.health < 40){
+        $('#'+self.id+' .health-bar').css('background', '#ff7600b5');
+        $('#'+self.id+' .health-bar').css('width', parseInt((sizeW*0.4))+'px');
+
+      }else{
+        $('#'+self.id+' .health-bar').css('background', '#ff1800b5');
+        $('#'+self.id+' .health-bar').css('width', parseInt((sizeW*0.2))+'px');
+      }
+
 
 
       if(self.move){
@@ -103,7 +256,7 @@ $(function(){
 
         self.endPath.x = ((self.path[1].x)*64)+32
         self.endPath.y = ((self.path[1].y)*64)+32
-        log('['+self.path[0].x+']['+self.path[0].y+']x:'+self.endPath.x+'  y:'+self.endPath.y );
+        // log('['+self.path[0].x+']['+self.path[0].y+']x:'+self.endPath.x+'  y:'+self.endPath.y );
 
 
 
@@ -201,12 +354,22 @@ $(function(){
       }
     };
   }
+  window.units = [];
+  window.units[0] = new Unit('#unit1');
+  window.units[0].enemy.add('camp2');
 
-  var run = new Unit('#unit1');
-  run = new Unit('#unit2');
-  run = new Unit('#unit3');
+  window.units[1] = new Unit('#unit2');
+  window.units[1].enemy.add('camp2');
 
-  // run.start();
+  window.units[2] = new Unit('#unit3');
+  window.units[2].enemy.add('camp2');
+
+  window.units[3] = new Unit('#unit4');
+  window.units[3].enemy.add('camp1');
+
+  window.units[4] = new Unit('#unit5');
+  window.units[4].enemy.add('camp1');
+
 
 
 

@@ -4,7 +4,9 @@ function unit(id,x,y){
   self.camp = '';
 
   $( '.units' ).append( '<div class="unit" id="unit'+(id)+'" style="left:'+x+'px;top:'+y+'px;"></div>' );
-  $( self.id  ).append('<div class="unit-view"><div>')
+  $( self.id  ).append('<div class="health-bar"><div>');
+  $( self.id  ).append('<div class="unit-view"><div>');
+  $( self.id  ).append('<div class="fireContainer"><div></div></div>');
 
   self.camp = function(id){
     self.camp = 'camp'+id ;
