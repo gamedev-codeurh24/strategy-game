@@ -6,6 +6,7 @@ function unit(id,x,y){
   $( '.units' ).append( '<div class="unit" id="unit'+(id)+'" style="left:'+x+'px;top:'+y+'px;"></div>' );
   $( self.id  ).append('<div class="health-bar"><div>');
   $( self.id  ).append('<div class="unit-view"><div>');
+  $( self.id  ).append('<div class="unit-logo"><div>');
   $( self.id  ).append('<div class="fireContainer"><div></div></div>');
 
   self.camp = function(id){
@@ -16,6 +17,18 @@ function unit(id,x,y){
 
   return self;
 
+}
+
+function calcAngleDegrees(x, y) {
+  return Math.atan2(y, x) * 180 / Math.PI;
+}
+function _360(x, y){
+    var d = calcAngleDegrees(x, y);
+    if( d >= 0 ){
+        return d;
+    }else{
+        return (360+d);
+    }
 }
 
 function calcHypotenuse(a, b) {

@@ -58,6 +58,9 @@ html,body{
     width: 32px;
     height: 32px;
     overflow: visible;
+    border-radius:100%;
+    border:1px solid black;
+    background-color: #777;
 }
 
 
@@ -111,4 +114,23 @@ html,body{
   background: #0F07;
   z-index: 30;
   margin-top: -5px;
+}
+
+.unit-logo{
+  position:absolute;
+  pointer-events:none;
+  width: 30px;
+  height: 30px;
+  background-image: url(/asset/img/soldier.png);
+  background-size: 20px 20px;
+  background-position: 50% 65%;
+  background-repeat: no-repeat;
+  z-index: 31;
+}
+
+.camp1{
+    background-color: red;
+}
+.camp2{
+    background-color: #0089ff;
 }
