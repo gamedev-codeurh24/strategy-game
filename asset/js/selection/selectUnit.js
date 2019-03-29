@@ -3,7 +3,7 @@ $(function(){
 
   // liste toutes les unités selectionnés à la souris
   window.unitSelected = [];
-  $('.unit').click(function(event){
+  $('body').on('click','.unit', function(event){
     window.buildingSelected = [];
     $('.building').css('border', 'solid 0px black');
 
