@@ -25,3 +25,11 @@
   background-color: #0000008f;
   pointer-events:none;
 }
+
+.tools .number-tasks{
+  color: #000000;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #85ff007a;
+}

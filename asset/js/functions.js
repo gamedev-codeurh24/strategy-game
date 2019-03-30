@@ -73,8 +73,21 @@ function mapPosY(){
 }
 
 // renvoi la position reel de l'image. (son centre par rapport au left)
+// function unitPosX(selecteurCSS){
+//   return (document.querySelector(selecteurCSS).offsetLeft) +(document.querySelector(selecteurCSS).offsetWidth/2);
+// }
+// renvoi la position reel de l'image. (son centre par rapport au top)
+// function unitPosY(selecteurCSS){
+// return (document.querySelector(selecteurCSS).offsetTop) +(document.querySelector(selecteurCSS).offsetHeight/2);
+// }
+
+// renvoi la position reel de l'image. (son centre par rapport au left)
 function unitPosX(selecteurCSS){
-    return parseInt(   $(selecteurCSS).css('left')  ) +(parseInt($(selecteurCSS).css('width'))/2);
+  // var elm = document.querySelector(selecteurCSS);
+  // log((elm.offsetLeft - elm.parentNode.offsetLeft+1)+' == '+parseInt(   $(selecteurCSS).css('left')  ))
+  // log((document.querySelector(selecteurCSS).offsetLeft) +(document.querySelector(selecteurCSS).offsetWidth/2));
+  // log(parseInt(   $(selecteurCSS).css('left')  ) +(parseInt($(selecteurCSS).css('width'))/2));
+  return parseInt(   $(selecteurCSS).css('left')  ) +(parseInt($(selecteurCSS).css('width'))/2);
 }
 // renvoi la position reel de l'image. (son centre par rapport au top)
 function unitPosY(selecteurCSS){
@@ -95,13 +108,9 @@ function pixel2IdArr(pixelY){
   return Math.floor(pixelY / 64);
 }
 
-function log(msg){
-  console.log(msg);
-}
 
 
-
-
+var log = console.log.bind(window.console);
 
 function pathWork(idx,idy, mp, SX,SY,EX,EY, sizeX){
   if(mp[EY+idy][EX+idx] != -1){

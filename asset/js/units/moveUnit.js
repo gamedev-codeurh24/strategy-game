@@ -14,6 +14,7 @@ let MoveUnit = {
   if(distance > 0) {
     if(this.path.data.length){
 
+      
       // cette condition permet de preciser a la derniere position
       // du chemin l'exactitude en x et y du clic de souris sur la
       // carte
@@ -28,7 +29,15 @@ let MoveUnit = {
         // distance verticale en y
         var dstY0 = ((this.path.data[0].y*64)+32) - unitPosY('#'+this.id);
       }
-
+      
+      //l'unité se tourne vers l'endroit où il va
+      var degres = _360(dstX0, dstY0);
+      if( degres > 90 && degres < 270){
+        
+        $('#'+this.id).css('transform', 'rotate('+degres+'deg) scaleY(-1)');
+      }else{
+        $('#'+this.id).css('transform', 'rotate('+degres+'deg) scaleY(1)');
+      }
 
       // ditance à vol d'oiseau
       var distance0 =  calcHypotenuse(dstX0, dstY0) ;
@@ -40,7 +49,7 @@ let MoveUnit = {
 
       if(distance0 <= 0){
         this.path.data.splice(0, 1)
-        log(this.path.data);
+        // log(this.path.data);
       }else{
         if (this.vx0 >= 0) {
           $( '#'+this.id ).css( 'left', '+='+(Math.abs(this.vx0))+'px' );

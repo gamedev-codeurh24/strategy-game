@@ -10,7 +10,6 @@ let ShotOnEnemy = {
       var n = objJQuery.length;
 
 
-      // $('#info1').text(element);
       // console.log(element)
       // la boucle
       // pour chaque balise ennemi

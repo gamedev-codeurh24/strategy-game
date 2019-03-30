@@ -32,3 +32,7 @@
 .building.camp2 .flag-color{
   background-color: #0089ff;
 }
+
+.building.infantry .img{
+  background-image: url(/asset/img/batiment/infantry-building.png);
+}

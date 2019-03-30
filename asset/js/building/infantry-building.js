@@ -1,10 +1,11 @@
 
-class Building  extends BasicElementOfWar {
+class Building extends BasicElementOfWar {
   
 
   constructor(x, y) {
-    super();    
-    super.firstName = 'building';
+    super('building');    
+    this.firstName = 'building';
+    
 
     // place l'unité sur la map
     this.x = x;
@@ -28,14 +29,25 @@ class Building  extends BasicElementOfWar {
     $( id  ).append('<div class="flag-color"><div>');
     $( id ).append('<div class="img"><div>');
 
-    $(id+' .img').css({
-      'backgroundImage': 'url(/asset/img/batiment/infantry-building.png)'
-    });
 
+    // return id
   }
 }
 
+class InfantryBuilding extends Building {
+
+  constructor(x, y){
+    super(x, y);
+    this.skin();
+  }
+
+  skin = () => {
+    
+    log(document.getElementById(this.id).offsetWidth);
+    $('#'+this.id).addClass('infantry');
+  }
+}
 
 var B;
-B = new Building(640,256);
+B = new InfantryBuilding(640,256);
 B.camp(2);

@@ -1,7 +1,6 @@
 
-class RootUnit  {
+class RootUnit extends BasicElementOfWar  {
   counter = 0;
-  camp = '';
 
   // chemin
   path = {
@@ -21,23 +20,23 @@ class RootUnit  {
   vy0;
 
   constructor(x, y) {
-    this.health = 100;
-
+    super('unit');
+    
     // place l'unité sur la map
     this.x = x;
     this.y = y;
     this.path.x  = x;
     this.path.y  = y;
     // lance un boucle dans l'unité pour la faire vivre
-    this.interval = setInterval( () => { this.loop(); },10);
+    // this.interval = setInterval( () => { this.loop(); },10);
     // variable globale qui recense les unités
-    if( window['gameUnit'] === undefined){
-      window['gameUnit'] = [];
-    }
+    // if( window['gameUnit'] === undefined){
+    //   window['gameUnit'] = [];
+    // }
     // génération de l'id de l'unité
-    this.id = 'unit'+(window.gameUnit.length+1);
+    // this.id = 'unit'+(window.gameUnit.length+1);
     // ajoute l'unité a la variable globale qui les regroupes
-    window['gameUnit'].push(this);
+    // window['gameUnit'].push(this);
 
 
     // ajoute une apparence a l'unité
@@ -59,33 +58,33 @@ class RootUnit  {
 
   // boucle qui fait vivre l'unité
   loop() {
+    super.loop();
     this.counter++;
 
-    if(this.camp != ''){
-      $( '#'+this.id ).addClass( this.camp );
-    }
+    // if(this.camp != ''){
+    //   $( '#'+this.id ).addClass( this.camp );
+    // }
 
     this.moveUnit();
 
     this.shotOnEnemy();
 
-    this.healthBar();
+    // this.healthBar();
+
 
 
   }
   // apparence de l'unité
-  skin = () => {
-    var id = '#'+this.id
-    $( '.units' ).append( '<div class="unit" id="'+(this.id)+'" style="left:'+(this.x-16)+'px;top:'+(this.y-16)+'px;"></div>' );
-    $( id ).append('<div class="health-bar"><div>');
-    $( id  ).append('<div class="unit-view"><div>');
-    $( id ).append('<div class="unit-logo"><div>');
+  skin() {
+    var id = super.skin();
+    // var id = '#'+this.id
+    // $( '.units' ).append( '<div class="unit" id="'+(this.id)+'" style="left:'+(this.x-16)+'px;top:'+(this.y-16)+'px;"></div>' );
+    // $( id ).append('<div class="health-bar"></div>');
+    // $( id  ).append('<div class="unit-view"></div>');
+    
+    $( id ).append('<div class="unit-logo"></div>');
     $( id  ).append('<div class="fireContainer"><div></div></div>');
 
-  }
-  // function de choix du camp d'appartenance
-  camp =   (id) => {
-    this.camp = 'camp'+id;
   }
 
   enemy = {
@@ -113,7 +112,7 @@ class RootUnit  {
 Object.assign(RootUnit.prototype, MoveUnit);
 Object.assign(RootUnit.prototype, PathUnit);
 Object.assign(RootUnit.prototype, ShotOnEnemy);
-Object.assign(RootUnit.prototype, HealthBar);
+// Object.assign(RootUnit.prototype, HealthBar);
 
 
 var RU;

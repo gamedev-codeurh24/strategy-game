@@ -28,9 +28,12 @@
                     <div class="row" id="infantry-tool">
                         <div class="col-6 pl-0 pr-0">
                             <div class="progress-bar"></div>
+                            <div class="number-tasks"></div>
                             <img id="infantry-machine-gun" src="/asset/img/tool/infantry/infantry-machine-gun.png" alt="picture infantry machine gun">
                         </div>
                         <div class="col-6 pl-0 pr-0">
+                            <div class="progress-bar"></div>
+                            <div class="number-tasks"></div>
                             <img id="infantry-rocket-launcher" src="/asset/img/tool/infantry/rocket-launcher.png" alt="picture rocket launcher">
                         </div>
                     </div>
@@ -60,13 +63,14 @@
     <script src="asset/js/selection/selectUnit.js"></script>
     <script src="asset/js/selection/buildingSelection.js"></script>
 
+    <script src="asset/js/BasicElementOfWar.js"></script>
+    
     <script src="asset/js/units/moveUnit.js"></script>
     <script src="asset/js/units/pathUnit.js"></script>
     <script src="asset/js/units/shotOnEnemy.js"></script>
     <script src="asset/js/units/healthBar.js"></script>
     <script src="asset/js/units/unit.js"></script>
 
-    <script src="asset/js/BasicElementOfWar.js"></script>
     <script src="asset/js/building/infantry-building.js"></script>
     <script src="asset/js/game.js"></script>
     <script>

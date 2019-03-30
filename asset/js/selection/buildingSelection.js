@@ -2,14 +2,14 @@ $(function(){
 
 
 
-  // liste toutes les unités selectionnés à la souris
-  window.unitSelected = [];
+  
   $('.building').click(function(event){
+    // supprime de la liste toutes les unités selectionnés à la souris
     window.unitSelected = [];
     $('.unit').css('border', 'solid 1px black');
 
-    // this.id = $(this).parent().attr('id');
 
+    
     // si on maintient la touche control alors on peut
     // selectionner plusieurs unités
     if(window.keyPressed.indexOf('Control') != -1){
