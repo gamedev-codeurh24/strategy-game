@@ -124,3 +124,16 @@ function pathWork(idx,idy, mp, SX,SY,EX,EY, sizeX){
   }
   return 99999999;
 }
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+// recupere l'unité du tableau qui les references
+function getUnitGame(id) {
+  var idNumber = parseInt(id.replace('unit', ''));
+  return window.gameUnit[idNumber-1];
+}
+
+function getValPosArr(camp, id, shiftX = 0, shiftY = 0) {
+  return window.mapUnit[camp][pixel2IdArr(unitPosY('#'+id))+shiftY][pixel2IdArr(unitPosX('#'+id))+shiftX];
+}

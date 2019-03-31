@@ -1,5 +1,40 @@
 let ShotOnEnemy = {
   shotOnEnemy(){
+
+    if( this.camp === undefined || this.camp == '' || window.mapUnit === undefined) {
+      return false;
+    }
+
+    if(this.camp == 'camp1'){
+      
+      if (    (getValPosArr('camp2', this.id, 1,0) != 0) 
+              && (getValPosArr('camp2', this.id, -1,0) != 0)
+              && (getValPosArr('camp2', this.id, 0,-1) != 0)
+              && (getValPosArr('camp2', this.id, 0,1) != 0)
+              && (getValPosArr('camp2', this.id, 1,1) != 0)
+              && (getValPosArr('camp2', this.id, -1,-1) != 0)
+              && (getValPosArr('camp2', this.id, -1,1) != 0)
+              && (getValPosArr('camp2', this.id, 1,-1) != 0)
+      ){
+        return false;
+      }
+    }
+
+    if(this.camp == 'camp2'){
+      
+      if (    (getValPosArr('camp1', this.id, 1,0) != 0) 
+              && (getValPosArr('camp1', this.id, -1,0) != 0)
+              && (getValPosArr('camp1', this.id, 0,-1) != 0)
+              && (getValPosArr('camp1', this.id, 0,1) != 0)
+              && (getValPosArr('camp1', this.id, 1,1) != 0)
+              && (getValPosArr('camp1', this.id, -1,-1) != 0)
+              && (getValPosArr('camp1', this.id, -1,1) != 0)
+              && (getValPosArr('camp1', this.id, 1,-1) != 0)
+      ){
+        return false;
+      }
+    }
+
     // pour chaque drapeau ennemi
     this.enemy.flag.forEach( (element) => {
       // récupere le resultat pour optimiser le temps de traitement

@@ -12,9 +12,12 @@ let MoveUnit = {
 
 
   if(distance > 0) {
+    
+
     if(this.path.data.length){
 
-      
+      getUnitGame(this.id).updatePosition();
+      // log(window.mapUnit);
       // cette condition permet de preciser a la derniere position
       // du chemin l'exactitude en x et y du clic de souris sur la
       // carte
@@ -49,7 +52,8 @@ let MoveUnit = {
 
       if(distance0 <= 0){
         this.path.data.splice(0, 1)
-        // log(this.path.data);
+        // getUnitGame(this.id).updatePosition();
+        // log(window.mapUnit);
       }else{
         if (this.vx0 >= 0) {
           $( '#'+this.id ).css( 'left', '+='+(Math.abs(this.vx0))+'px' );

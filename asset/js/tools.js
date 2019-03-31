@@ -18,7 +18,6 @@ $(function(){
       // si ou alors on compte le nombre de fois que la creation sera
       // enchainer
       window['toolRequest']['infantry-machine-gun']++;
-      log($(this).find('.number-tasks'))
       // affiche le nombre de demande
       $(this).parent().find('.number-tasks').text(window['toolRequest']['infantry-machine-gun']);
       return false;

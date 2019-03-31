@@ -23,6 +23,13 @@ $(function(){
       [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
 
+    // copie le tableau map pour obtenir le tableau mapUnit a la bonne dimension
+    // et remet tout a zéro.
+    window.mapUnit = [];
+    window.mapUnit['camp1'] = window.map.map(x => x.map(x => 0));
+    window.mapUnit['camp2'] = window.map.map(x => x.map(x => 0));
+    
+
 
     // adapte la taille de a div de la map pour
     // ne pas décaller les div du cadriallage

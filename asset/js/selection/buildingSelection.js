@@ -29,7 +29,6 @@ $(function(){
     $('.building').css('border', 'solid 1px black');
     window.buildingSelected.forEach(function(element) {
       $('#'+element).css('border', 'solid 1px #08fb08');
-      log(window.buildingSelected );
     });
 
 

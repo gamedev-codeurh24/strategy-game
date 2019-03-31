@@ -1,6 +1,7 @@
 
 class RootUnit extends BasicElementOfWar  {
   counter = 0;
+  
 
   // chemin
   path = {
@@ -27,16 +28,12 @@ class RootUnit extends BasicElementOfWar  {
     this.y = y;
     this.path.x  = x;
     this.path.y  = y;
-    // lance un boucle dans l'unité pour la faire vivre
-    // this.interval = setInterval( () => { this.loop(); },10);
-    // variable globale qui recense les unités
-    // if( window['gameUnit'] === undefined){
-    //   window['gameUnit'] = [];
-    // }
-    // génération de l'id de l'unité
-    // this.id = 'unit'+(window.gameUnit.length+1);
-    // ajoute l'unité a la variable globale qui les regroupes
-    // window['gameUnit'].push(this);
+
+    this.lastArrPos = {x,y};
+    this.lastArrPos.x = pixel2IdArr(x);
+    this.lastArrPos.y = pixel2IdArr(y);
+
+
 
 
     // ajoute une apparence a l'unité
@@ -61,30 +58,55 @@ class RootUnit extends BasicElementOfWar  {
     super.loop();
     this.counter++;
 
-    // if(this.camp != ''){
-    //   $( '#'+this.id ).addClass( this.camp );
-    // }
+    this.updatePosition();
 
     this.moveUnit();
 
     this.shotOnEnemy();
-
-    // this.healthBar();
-
-
-
   }
   // apparence de l'unité
   skin() {
     var id = super.skin();
-    // var id = '#'+this.id
-    // $( '.units' ).append( '<div class="unit" id="'+(this.id)+'" style="left:'+(this.x-16)+'px;top:'+(this.y-16)+'px;"></div>' );
-    // $( id ).append('<div class="health-bar"></div>');
-    // $( id  ).append('<div class="unit-view"></div>');
-    
     $( id ).append('<div class="unit-logo"></div>');
     $( id  ).append('<div class="fireContainer"><div></div></div>');
+  }
 
+  updatePosition(){
+    // s'il appartient à un camp alors il peut être mis sur la carte prévu
+    // pour ce camp
+    if(this.camp != ''){
+
+      // tant que les maps n'existent pas ont attent
+      // avant de poursuivre
+      if(window.mapUnit != undefined){
+        // met à jour la carte des emplacements des unitées
+
+        
+        // if(this.id == 'unit4'){
+        //   log('MAJ', pixel2IdArr(unitPosX('#'+this.id)))
+        // }
+        // si la position actuelle sur le quadriallage est a zero alors que elle devrai etre à 1 
+        if( window.mapUnit[this.camp][pixel2IdArr(unitPosY('#'+this.id))][pixel2IdArr(unitPosX('#'+this.id))] ==  0) {
+          
+          // on passe cette case à 1
+          window.mapUnit[this.camp][pixel2IdArr(unitPosY('#'+this.id))][pixel2IdArr(unitPosX('#'+this.id))] = 1;
+
+          // l'ancienne case peut revenir à zero si en y ou en x a changé
+          if(pixel2IdArr(unitPosY('#'+this.id)) != this.lastArrPos.y || pixel2IdArr(unitPosX('#'+this.id)) != this.lastArrPos.x){
+            
+            // ancienne position passe a zéro
+              window.mapUnit[this.camp][this.lastArrPos.y][this.lastArrPos.x] = 0;
+              // l'ancienne position devient la position actuelle
+              this.lastArrPos.y = pixel2IdArr(unitPosY('#'+this.id));
+              this.lastArrPos.x = pixel2IdArr(unitPosX('#'+this.id));            
+          }
+
+        }else{
+          // console('déjà pris');  
+        }
+      }
+
+    }
   }
 
   enemy = {

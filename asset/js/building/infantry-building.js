@@ -42,8 +42,6 @@ class InfantryBuilding extends Building {
   }
 
   skin = () => {
-    
-    log(document.getElementById(this.id).offsetWidth);
     $('#'+this.id).addClass('infantry');
   }
 }
